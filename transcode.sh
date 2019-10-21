@@ -60,6 +60,9 @@ function mp3()
                 mv -f "$tmp_file" "$output_file" || die "Could not move file to \"$output_file\"."
                 ;;
 
+            application/octet-stream)
+                echo "Warning: Assuming \"$input_file\" is a MP3 file."
+                ;&
             audio/mpeg)
                 echo "Copying MP3..."
                 cp -f "$input_file" "$output_file"
@@ -150,6 +153,9 @@ function ogg()
                 mv -f "$tmp_ogg" "$output_file" || die "Could not move file to \"$output_file\"."
                 ;;
 
+            application/octet-stream)
+                echo "Warning: Assuming \"$input_file\" is a MP3 file."
+                ;&
             audio/mpeg)
                 echo "Transcoding OGG..."
                 ffmpeg -hide_banner -loglevel fatal -i "$input_file" -y -map a -qscale:a 6 -id3v2_version 3 -f ogg "$tmp_ogg" || die "Could not transcode to \"$tmp_ogg\"."
