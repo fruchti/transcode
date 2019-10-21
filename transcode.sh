@@ -1,7 +1,7 @@
 #!/bin/sh
 
 output_owner=fruchti:data
-lockfile=/flags/mp3-transcode-lock
+lockfile=/tmp/music-transcode.lock
 
 if [ -f "$lockfile" ] ; then
     echo "Another instance is already running. Exiting."
