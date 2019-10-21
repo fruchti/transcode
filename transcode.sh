@@ -35,6 +35,9 @@ function mp3()
     if [ ! -d "$directory" ] ; then
         echo "New Directory: \"$directory\""
         mkdir -p "$directory" || die "Could not create directory \"$directory\"."
+        if [ ! "$output_owner" = "" ] ; then
+            chown $output_owner "$directory" || die "Could not change permissions on \"$directory\"."
+        fi
     fi
 
     transcode=false
@@ -114,6 +117,9 @@ function ogg()
     if [ ! -d "$directory" ] ; then
         echo "New Directory: \"$directory\""
         mkdir -p "$directory" || die "Could not create directory \"$directory\"."
+        if [ ! "$output_owner" = "" ] ; then
+            chown $output_owner "$directory" || die "Could not change permissions on \"$directory\"."
+        fi
     fi
 
     transcode=false
