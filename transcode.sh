@@ -2,8 +2,10 @@
 
 input_directory=/data/music
 
-tmp_directory=/data/tmp
+tmp_directory=/data/tmp/transcode
 lock_file=/tmp/music-transcode.lock
+
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 function die()
 {
@@ -22,7 +24,7 @@ fi
 function cleanup()
 {
     rm -f "$lock_file"
-    rm -rf $tmp_directory"
+    rm -rf "$tmp_directory"
 }
 
 trap cleanup EXIT SIGTERM SIGKILL
@@ -34,8 +36,8 @@ fi
 SAVEIFS=$IFS
 IFS=`echo -ne "\n\b"`
 for file in `find "$input_directory" -name '*.flac' -or -name '*.mp3' | sort`; do
-    ./transcode_to_mp3.sh "$file" "$input_directory" "/data/mp3" || break
-    ./transcode_to_ogg.sh "$file" "$input_directory" "/data/ogg" || break
+    bash ${__dir}/transcode_to_mp3.sh "$file" "$input_directory" "/data/mp3" || break
+    bash ${__dir}/transcode_to_ogg.sh "$file" "$input_directory" "/data/ogg" || break
 done
 
 echo "Done Transcoding."

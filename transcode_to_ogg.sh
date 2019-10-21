@@ -39,7 +39,7 @@ function ogg_add_cover()
 input_file="$1"
 input_directory="$2"
 output_directory="$3"
-tmp_directory=/data/tmp
+tmp_directory=/data/tmp/transcode
 output_file="`echo "$input_file" | sed -E "s#^$input_directory(.+)\\.[a-z0-9]+\\$#$output_directory\\1.ogg#g"`"
 
 directory="`dirname "$output_file"`"
