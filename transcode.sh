@@ -1,13 +1,7 @@
 #!/bin/sh
 
 output_owner=fruchti:data
-updateflagfile=/flags/mp3-transcode
 lockfile=/flags/mp3-transcode-lock
-
-if [ ! -f "$updateflagfile" ] && [ ! "$1" = "-f" ] ; then
-    echo "No update needed. Exiting."
-    exit
-fi
 
 if [ -f "$lockfile" ] ; then
     echo "Another instance is already running. Exiting."
@@ -112,5 +106,4 @@ done
 echo "Done Transcoding."
 IFS=$SAVEIFS
 
-rm -f "$updateflagfile"
 rm -f "$lockfile"
