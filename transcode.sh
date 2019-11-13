@@ -30,7 +30,7 @@ function transcode_to_mp3()
     if [ "$transcode" = true ] ; then
         input_type="`file -b --mime-type "$input_file"`"
         case "$input_type" in
-            audio/flac)
+            "audio/flac"|"audio/x-flac")
                 tmp_file="$tmp_directory/`basename "$output_file"`"
                 echo "Transcoding MP3..."
                 ffmpeg -hide_banner -loglevel fatal -i "$input_file" -y -b:a 320k -qscale:a 2 -id3v2_version 3 -f mp3 "$tmp_file" || { echo "Failed to transcode to \"$tmp_file\"." ; return 1 ; }
@@ -112,7 +112,7 @@ function transcode_to_ogg()
         tmp_cover="$tmp_directory/cover"
 
         case "$input_type" in
-            audio/flac)
+            "audio/flac"|"audio/x-flac")
                 echo "Transcoding OGG..."
                 ffmpeg -hide_banner -loglevel fatal -i "$input_file" -y -map a -qscale:a 6 -id3v2_version 3 -f ogg "$tmp_ogg" || { echo "Could not transcode to \"$tmp_ogg\"." ; return 1 ; }
 
