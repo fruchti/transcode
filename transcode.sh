@@ -9,9 +9,9 @@ function transcode_to_mp3()
 {
     input_file="$1"
     output_directory="$2"
-    output_file="`echo "$input_file" | sed -E "s#^$input_directory(.+)\\.[a-z0-9]+\\$#$output_directory\\1.mp3#g"`"
+    output_file="$(echo "$input_file" | sed -E "s#^$input_directory(.+)\\.[a-z0-9]+\\$#$output_directory\\1.mp3#g")"
 
-    directory="`dirname "$output_file"`"
+    directory="$(dirname "$output_file")"
     if [ ! -d "$directory" ] ; then
         echo "New Directory: \"$directory\""
         mkdir -p "$directory" || { echo "Could not create directory \"$directory\"." ; return 1 ; }
@@ -28,10 +28,10 @@ function transcode_to_mp3()
     fi
 
     if [ "$transcode" = true ] ; then
-        input_type="`file -b --mime-type "$input_file"`"
+        input_type="$(file -b --mime-type "$input_file")"
         case "$input_type" in
             "audio/flac"|"audio/x-flac")
-                tmp_file="$tmp_directory/`basename "$output_file"`"
+                tmp_file="$tmp_directory/$(basename "$output_file")"
                 echo "Transcoding MP3..."
                 ffmpeg -hide_banner -loglevel fatal -i "$input_file" -y -b:a 320k -qscale:a 2 -id3v2_version 3 -f mp3 "$tmp_file" || { echo "Failed to transcode to \"$tmp_file\"." ; return 1 ; }
                 mv -f "$tmp_file" "$output_file" || { echo "Could not move file to \"$output_file\"." ; return 1 ; }
@@ -61,7 +61,7 @@ function ogg_add_cover()
     tmp_metafile="$tmp_directory/metadata"
     tmp_mdimg="$tmp_directory/image-with-header"
 
-    cover_mime_type="`file -b --mime-type "$cover_file"`"
+    cover_mime_type="$(file -b --mime-type "$cover_file")"
 
     description=""
     vorbiscomment --list --raw "$ogg_file" > "$tmp_metafile" && \
@@ -87,9 +87,9 @@ function transcode_to_ogg()
 {
     input_file="$1"
     output_directory="$2"
-    output_file="`echo "$input_file" | sed -E "s#^$input_directory(.+)\\.[a-z0-9]+\\$#$output_directory\\1.ogg#g"`"
+    output_file="$(echo "$input_file" | sed -E "s#^$input_directory(.+)\\.[a-z0-9]+\\$#$output_directory\\1.ogg#g")"
 
-    directory="`dirname "$output_file"`"
+    directory="$(dirname "$output_file")"
     if [ ! -d "$directory" ] ; then
         echo "New Directory: \"$directory\""
         mkdir -p "$directory" || { echo "Could not create directory \"$directory\"." ; return 1 ; }
@@ -106,9 +106,9 @@ function transcode_to_ogg()
     fi
 
     if [ "$transcode" = true ] ; then
-        input_type="`file -b --mime-type "$input_file"`"
+        input_type="$(file -b --mime-type "$input_file")"
 
-        tmp_ogg="$tmp_directory/`basename "$output_file"`"
+        tmp_ogg="$tmp_directory/$(basename "$output_file")"
         tmp_cover="$tmp_directory/cover"
 
         case "$input_type" in
@@ -172,8 +172,8 @@ if [ ! -d "$tmp_directory" ] ; then
 fi
 
 SAVEIFS=$IFS
-IFS=`echo -ne "\n\b"`
-for file in `find "$input_directory" -name '*.flac' -or -name '*.mp3' | sort`; do
+IFS=$(echo -ne "\n\b")
+for file in $(find "$input_directory" -name '*.flac' -or -name '*.mp3' | sort); do
     transcode_to_mp3 "$file" "/data/mp3" || break
     transcode_to_ogg "$file" "/data/ogg" || break
 done
